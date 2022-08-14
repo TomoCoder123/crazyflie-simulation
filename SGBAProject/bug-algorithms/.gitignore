@@ -1,0 +1,5 @@
+*.pyc
+.cproject
+.project
+.pydevproject
+statistics_scripts/experiments/*

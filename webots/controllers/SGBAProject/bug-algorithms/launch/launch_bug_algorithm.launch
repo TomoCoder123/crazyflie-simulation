@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Environment Generate Node -->
+<node pkg="indoor_environment_generator" type="indoor_environment_generator_node" name="indoor_environment_generator_node" output="screen"/>
+
+
+   <group ns="bot1">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+        <!-- bug_types: wf, com_bug, bug_2, alg_1, alg_2, i_bug, blind_bug, gradient_bug, i_bug_2-->
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="-2.36"/>
+      </node>
+   </group>
+
+
+  <group ns="bot2">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="0.79"/>
+      </node>
+   </group>
+
+   <group ns="bot3">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="2.36"/>
+      </node>
+   </group>
+
+   <group ns="bot4">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="-0.79"/>
+      </node>
+   </group>
+
+   <group ns="bot5">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="-2.36"/>
+      </node>
+   </group>
+
+   <group ns="bot6">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="0.79"/>
+      </node>
+   </group>
+
+   <!--group ns="bot7">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="2.36"/>
+      </node>
+   </group>
+
+   <group ns="bot8">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="-0.79"/>
+      </node>
+   </group>
+
+   <group ns="bot9">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="-2.97"/>
+      </node>
+   </group>
+
+   <group ns="bot10">
+      <node pkg="bug_algorithms" type="bug_algorithms.py" name="bug_algorithms" output="screen">
+      	<param name="bug_type" value="gradient_embedded_bug" />
+        <param name="outbound_angle" value="0.79"/>
+      </node>
+   </group-->
+  <node pkg="bug_algorithms" type="timed_roslaunch.sh"
+    args="2 argos_bridge argos_timed_launch.launch"
+    name="timed_roslaunch" output="screen" />
+
+</launch>
+
+
+
+
+
