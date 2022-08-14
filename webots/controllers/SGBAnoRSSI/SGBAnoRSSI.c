@@ -142,7 +142,7 @@ static int get_time(){
  return (start.tv_sec) * 1000000 + start.tv_usec; 
 }
 
-static void get_id(){
+static void set_id(){
  
  const char *name = wb_robot_get_name();
  own_id = name[9];
@@ -463,6 +463,7 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
 
 int main(int argc, char **argv) {
   /* necessary to initialize webots stuff */
+  set_id();
   wb_robot_init();
   
   int timestep = (int)wb_robot_get_basic_time_step();
@@ -607,17 +608,17 @@ int main(int argc, char **argv) {
 
   }
   else{
-      if (own_id == 4 || own_id == 8) { //make own_id
+      if (own_id == 1) { //make own_id
             init_gradient_bug_loop_controller(0.4, 0.5, -0.8);//hasnt taken off
-          } else if (own_id == 2 || own_id == 6) {
+          } else if (own_id == 2) {
             init_gradient_bug_loop_controller(0.4, 0.5, 0.8);
-          } else if (own_id == 3 || own_id == 7) {
+          } else if (own_id == 3) {
             init_gradient_bug_loop_controller(0.4, 0.5, -2.4);
-          } else if (own_id == 5 || own_id == 9) {
-            init_gradient_bug_loop_controller(0.4, 0.5, 2.4);
-          } else {
-            init_gradient_bug_loop_controller(0.4, 0.5, 0.8);
-          }
+          } //else if (own_id == 5 || own_id == 9) {
+           // init_gradient_bug_loop_controller(0.4, 0.5, 2.4);
+         // } else {
+        //    init_gradient_bug_loop_controller(0.4, 0.5, 0.8);
+         // }
   }
   }
   else{
