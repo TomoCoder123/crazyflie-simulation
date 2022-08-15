@@ -1,14 +1,14 @@
-/* 
+/*
  *  ...........       ____  _ __
  *  |  ,-^-,  |      / __ )(_) /_______________ _____  ___
  *  | (  O  ) |     / __  / / __/ ___/ ___/ __ `/_  / / _ \
  *  | / ,..´  |    / /_/ / / /_/ /__/ /  / /_/ / / /_/  __/
  *     +.......   /_____/_/\__/\___/_/   \__,_/ /___/\___/
- *  
+ *
  * MIT License
- * 
+ *
  * Copyright (c) 2022 Bitcraze
- * 
+ *
  * @file crazyflie_controller.c
  * Controls the crazyflie motors in webots
  */
@@ -26,6 +26,7 @@
 #include <webots/distance_sensor.h>
 
 #include "../../../controllers/pid_controller.h"
+#include "../../../controllers/wallfollowing_multiranger.h"
 
 int main(int argc, char **argv) {
   wb_robot_init();
@@ -96,6 +97,7 @@ int main(int argc, char **argv) {
   MotorPower_t motorPower;
 
   printf("Take off!\n");
+  wallFollowerInit(0.5, 0.3, 0);
 
   while (wb_robot_step(timestep) != -1) {
 
@@ -124,11 +126,11 @@ int main(int argc, char **argv) {
     desiredState.vx = 0;
     desiredState.vy = 0;
     desiredState.yaw_rate = 0;
-    desiredState.altitude = 1.0;
+    desiredState.altitude = 0.7;
 
-    double forwardDesired = 0;
-    double sidewaysDesired = 0;
-    double yawDesired = 0;
+    float forwardDesired = 0;
+    float sidewaysDesired = 0;
+    float yawDesired = 0;
 
     // Control altitude
     int key = wb_keyboard_get_key();
@@ -155,17 +157,25 @@ int main(int argc, char **argv) {
         }
       key = wb_keyboard_get_key();
     }
-    
+
     // Example how to get sensor data
     // range_front_value = wb_distance_sensor_get_value(range_front));
     // const unsigned char *image = wb_camera_get_image(camera);
 
 
-    desiredState.yaw_rate = yawDesired;
+    float range_front_value = (float)wb_distance_sensor_get_value(range_front)/1000.0f;
+    float range_right_value = (float)wb_distance_sensor_get_value(range_right)/1000.0f;
+
+    CommandVel_t cmdVel;
+
+    wallFollower(&cmdVel, range_front_value, range_right_value, actualYaw, 1, wb_robot_get_time());
+
+
+    desiredState.yaw_rate = cmdVel.cmdAngW;
 
     // PID velocity controller with fixed height
-    desiredState.vy = sidewaysDesired;
-    desiredState.vx = forwardDesired;
+    desiredState.vy = cmdVel.cmdVelY;
+    desiredState.vx = cmdVel.cmdVelX;
     pid_velocity_fixed_height_controller(actualState, &desiredState,
     gainsPID, dt, &motorPower);
 
@@ -174,13 +184,13 @@ int main(int argc, char **argv) {
     desiredState.pitch = forwardDesired;
      pid_attitude_fixed_height_controller(actualState, &desiredState,
     gainsPID, dt, &motorPower);*/
-    
+
     // Setting motorspeed
     wb_motor_set_velocity(m1_motor, - motorPower.m1);
     wb_motor_set_velocity(m2_motor, motorPower.m2);
     wb_motor_set_velocity(m3_motor, - motorPower.m3);
     wb_motor_set_velocity(m4_motor, motorPower.m4);
-    
+
     // Save past time for next time step
     past_time = wb_robot_get_time();
     pastXGlobal = xGlobal;
