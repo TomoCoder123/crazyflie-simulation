@@ -130,6 +130,19 @@ static void hoversp(setpoint_t *sp, float height)
   sp->mode.yaw = modeVelocity;
   sp->attitudeRate.yaw = 0.0;
 }
+static bool logicIsCloseTo(float real_value, float checked_value, float margin)
+{
+  if (real_value > checked_value - margin && real_value < checked_value + margin) {
+    return true;
+  } else {
+    return false;
+  }
+}
+static void commandTurn(float *vel_w, float max_rate)
+{
+  *vel_w = max_rate;
+}
+
 static int get_time(){
  
 
@@ -250,9 +263,9 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
 
         } else if (left_range > 2.0f && right_range > 2.0f) {
           direction = 1.0f;
-        } else {
+        } //else {
 
-        }
+        //}
       }
 
       pos_x_hit = current_pos_x;
@@ -352,7 +365,7 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
 
     // If going straight
     //    determine by the gradient of the crazyradio what the approx direction is.
-    if (state_wf == 5) {
+    //if (state_wf == 5) {
 
 
       // if (!outbound) {
@@ -392,7 +405,7 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
     // }
   
   
-  // }
+  }
   // else if (state == 4){
   
   // if (rssi_inter >= rssi_collision_threshold) {
@@ -400,7 +413,7 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
       // state = transition(2); //rotate_to_goal
     // }
   
-  }
+  //}
     /***********************************************************
    * Handle state actions
    ***********************************************************/
@@ -454,7 +467,7 @@ int gradient_bug_loop_controller(float *vel_x, float *vel_y, float *vel_w, int *
     }
   
   }                    
-     }
+}
                         
   /***********************************************************
    * Handle state actions
@@ -646,3 +659,6 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
+
+
